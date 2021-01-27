@@ -4,7 +4,7 @@ return (
     <section style={props.urlBg ? {backgroundImage:`url(${props.urlBg})`} : {backgroundColor:`${props.colorBg}`}} className={classes.root} id={props.id}>
     <div className={classes.wrapper}>
         <article>
-            <div className={classes.wrapper}>
+            <div className={classes.title}>
                 <h3>{props.title}</h3>
                 <span className={classes.separator}></span>
             </div>
