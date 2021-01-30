@@ -1,15 +1,15 @@
 import classes from './Layout.module.css'
-const Layout = (props) => {
+const Layout = ({id, urlBg, colorBg, title, children}) => {
 return (
-    <section style={props.urlBg ? {backgroundImage:`url(${props.urlBg})`} : {backgroundColor:`${props.colorBg}`}} className={classes.root} id={props.id}>
+    <section style={urlBg ? {backgroundImage:`url(${urlBg})`} : {backgroundColor:`${colorBg}`}} className={classes.root} id={id}>
     <div className={classes.wrapper}>
         <article>
             <div className={classes.title}>
-                <h3>{props.title}</h3>
+                <h3>{title}</h3>
                 <span className={classes.separator}></span>
             </div>
             <div className= {`${classes.desc} ${classes.full}`}>
-                <p>{props.descr}</p>
+                {children}
             </div>
         </article>
     </div>
