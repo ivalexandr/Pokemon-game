@@ -3,6 +3,7 @@ import Header from './Components/Header/Header'
 import Layout from './Components/Layout/Layout'
 import Footer from './Components/Footer/Footer'
 import img from './bg1.jpg'
+import {flex} from './App.module.css'
 
 function App() {
   return (
