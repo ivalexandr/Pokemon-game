@@ -1,0 +1,14 @@
+.btn {
+    padding: 15px 40px;
+    cursor: pointer;
+    background-color: rgb(186, 29, 146);
+    color: #fff;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.btn:hover {
+    outline: 1px solid rgb(186, 29, 146);
+    background-color: transparent;
+    color: rgb(186, 29, 146);
+}
