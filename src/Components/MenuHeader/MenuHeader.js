@@ -10,9 +10,9 @@ const MenuHeader = () => {
         setCounter(1)
     e.preventDefault()
     if(isActive){
-        setActive(false)
+        setActive(!isActive)
     }else{
-        setActive(true)
+        setActive(!isActive)
     }
 
 }
