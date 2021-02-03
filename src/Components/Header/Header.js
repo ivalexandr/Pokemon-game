@@ -1,14 +1,17 @@
 import classNames from 'classnames'
+import {useHistory} from 'react-router-dom'
 import classes from './Header.module.css'
 
 const Header = (props) => {
+    const history = useHistory()
     const handlerClick = () => {
-        console.log('#####','<Header />')
-        props.onClickButton && props.onClickButton('game')
+        history.push('/game')
     }
     return (
         <header className={classNames(classes.root)}>
             <div className={classNames(classes.forest)}></div>
+            <div className = {classes.silhouette}></div>
+            <div className = {classes.moon}></div>
             <div className={classNames(classes.container)}>
                 <h1>{props.title}</h1>
                 <p>{props.descr}</p>

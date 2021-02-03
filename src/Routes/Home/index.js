@@ -1,25 +1,27 @@
-import React from 'react'
+import { React, useState } from 'react'
 import Header from '../../Components/Header/Header'
 import Layout from '../../Components/Layout/Layout'
 import Footer from '../../Components/Footer/Footer'
-import MenuHeader from '../../Components/MenuHeader/MenuHeader'
 import img from './bg1.jpg'
-import { POKEMONS } from './Pokemon'
-import PokemonCard from '../../Components/PokemonCard/PokemonCard'
-import { flex } from './style.module.css'
+import { POKEMONS } from '../../Pokemon'
 
-const HomePage = (props) => {
-    const handlerClick = (page) => {
-        console.log('#####', '<HomePage />')
-        props.onChangePage && props.onChangePage(page)
+const HomePage = () => {
+    const [isCards, setCards] = useState(POKEMONS)
+    const handlerClick = (id) => {
+        let newPokemons = isCards.map((item) => {
+            if (item.id === id) {
+                item.active = true
+            }
+            return item
+        })
+        setCards(newPokemons)
     }
     return (
         <>
-        <MenuHeader />
             <Header
                 title='This is title'
                 descr='This is description'
-                onClickButton = {handlerClick}
+                onClickButton={handlerClick}
             />
             <Layout
                 id='RULES'
@@ -39,18 +41,6 @@ const HomePage = (props) => {
                 title='CARDS'
                 colorBg='#e6e6e6'
             >
-                <div className={flex}>
-                    {
-                        POKEMONS.map(item => <PokemonCard
-                            key={item.id}
-                            name={item.name}
-                            img={item.img}
-                            id={item.id}
-                            type={item.type}
-                            values={item.values}
-                        />)
-                    }
-                </div>
             </Layout>
             <Layout
                 id='contacts'
