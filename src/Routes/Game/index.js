@@ -10,13 +10,14 @@ const GamePage = () => {
     }
     const [isCards, setCards] = useState(POKEMONS)
     const handlerClickCard = (id) => {
-        let newPokemonsCards = (isCards.map((item) => {
+        let newPokemonsCards = JSON.parse(JSON.stringify(isCards))
+        newPokemonsCards.forEach((item) => {
             if(item.id === id){
                 item.active = true
             }
-            return item
-        }))        
+        })      
         setCards(newPokemonsCards)
+        console.log(POKEMONS)
     }
     return (
         <>
