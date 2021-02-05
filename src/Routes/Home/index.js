@@ -1,25 +1,14 @@
-import React from 'react'
+import { React } from 'react'
 import Header from '../../Components/Header/Header'
 import Layout from '../../Components/Layout/Layout'
 import Footer from '../../Components/Footer/Footer'
-import MenuHeader from '../../Components/MenuHeader/MenuHeader'
 import img from './bg1.jpg'
-import { POKEMONS } from './Pokemon'
-import PokemonCard from '../../Components/PokemonCard/PokemonCard'
-import { flex } from './style.module.css'
-
-const HomePage = (props) => {
-    const handlerClick = (page) => {
-        console.log('#####', '<HomePage />')
-        props.onChangePage && props.onChangePage(page)
-    }
+const HomePage = () => {
     return (
         <>
-        <MenuHeader />
             <Header
                 title='This is title'
                 descr='This is description'
-                onClickButton = {handlerClick}
             />
             <Layout
                 id='RULES'
@@ -38,19 +27,7 @@ const HomePage = (props) => {
                 id='CARDS'
                 title='CARDS'
                 colorBg='#e6e6e6'
-            >
-                <div className={flex}>
-                    {
-                        POKEMONS.map(item => <PokemonCard
-                            key={item.id}
-                            name={item.name}
-                            img={item.img}
-                            id={item.id}
-                            type={item.type}
-                            values={item.values}
-                        />)
-                    }
-                </div>
+                >
             </Layout>
             <Layout
                 id='contacts'

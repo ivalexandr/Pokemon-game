@@ -1,16 +1,16 @@
 import classNames from 'classnames'
 import classes from './NavBar.module.css'
 
-const NavBar = (props) => {
+const NavBar = ({bgActive = false, activeClass, onClickBurger}) => {
     return (
-        <nav id={classes.navbar}>
-            <div className={classes.navWrapper}>
+        <nav id={classes.navbar} className = {classNames({[classes.bgActive]: bgActive}) }>
+            <div className={classNames(classes.navWrapper)}>
                 <p className={classes.brand}>
                     LOGO
                 </p>
-                <a onClick = {props.onClickBurger} href = '/#' className = {classNames(classes.menuButton, {[classes.active]:props.activeClass})}>
+                <div onClick = {onClickBurger} className = {classNames(classes.menuButton, {[classes.active]:activeClass})}>
                     <span />
-                </a>
+                </div>
             </div>
         </nav>
     )

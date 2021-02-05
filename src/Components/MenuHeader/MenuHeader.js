@@ -1,31 +1,26 @@
 import { useState } from 'react'
 import Menu from '../Menu/Menu'
 import NavBar from '../NavBar/NavBar'
-
-const MenuHeader = () => {
-
-    const [isActive, setActive] = useState(false)
-    const [isCounter, setCounter] = useState(0)
-    const handlerClick = (e) => {
-        setCounter(1)
-    e.preventDefault()
-    if(isActive){
-        setActive(!isActive)
-    }else{
-        setActive(!isActive)
+const MenuHeader = ({bgActive}) => {
+    const [isActive, setActive] = useState(null)
+    const handlerClick = () => {
+        setActive(isActive => !isActive)
     }
-
-}
+    const handlerClickMenu = (active) => {
+        setActive(active)
+    }
     return (
         <>
-            <NavBar 
-                onClickBurger = {handlerClick}
-                activeClass = {isActive}
+            <NavBar
+                onClickBurger={handlerClick}
+                activeClass={isActive}
+                bgActive = {bgActive}
             />
-            <Menu 
-                activeClass = {isActive}
-                counterActive = {isCounter}
+            <Menu
+                onClickMenuItem = {handlerClickMenu}
+                activeClass={isActive}
             />
+
         </>
     )
 }
