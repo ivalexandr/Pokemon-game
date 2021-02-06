@@ -6,6 +6,8 @@
     border: none;
     text-transform: uppercase;
     font-weight: bold;
+    display: block;
+    margin: 0 auto;
 }
 .btn:hover {
     outline: 1px solid rgb(186, 29, 146);

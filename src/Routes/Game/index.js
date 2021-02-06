@@ -1,7 +1,9 @@
-import {useState} from 'react'
-import {useHistory} from 'react-router-dom'
-import {POKEMONS} from '../../Pokemon'
+import { useState } from 'react'
+import Layout from '../../Components/Layout/Layout'
+import { useHistory } from 'react-router-dom'
+import { POKEMONS } from '../../Pokemon'
 import PokemonCard from '../../Components/PokemonCard/PokemonCard'
+import img from '../../Routes/Home/bg1.jpg'
 import classes from './style.module.css'
 const GamePage = () => {
     const history = useHistory()
@@ -12,24 +14,26 @@ const GamePage = () => {
     const handlerClickCard = (id) => {
         let newPokemonsCards = []
         newPokemonsCards = isCards.map(item => {
-            if(item.id === id){
-                return{
+            if (item.id === id) {
+                return {
                     ...item,
                     active: !item.active
                 }
             }
             return item
-        })     
+        })
         setCards(newPokemonsCards)
     }
     return (
         <>
-            <div>
-                <h2>This is page GamePages</h2>
-                <button className={classes.btn} onClick={handlerClick}>
-                    Return to HomePage
+            <button className={classes.btn} onClick={handlerClick}>
+                Return to HomePage
             </button>
-            <div className={classes.flex}>
+            <Layout
+                title="CARDS GAME POKEMONS!"
+                urlBg = {img}
+            >
+                <div className={classes.flex}>
                     {
                         isCards.map(item => <PokemonCard
                             key={item.id}
@@ -43,7 +47,7 @@ const GamePage = () => {
                         />)
                     }
                 </div>
-            </div>
+            </Layout>
         </>
 
     )
