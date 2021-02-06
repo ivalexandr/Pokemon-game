@@ -53,13 +53,6 @@ const GamePage = () => {
                 "top": "A"
             }
         })
-        setCards(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = { ...item[1] }
-                acc[item[0]] = pokemon
-                return acc
-            }, {})
-        })
         setRender(!isRender)
     }
     const getCardsDataBase = async (name) => {
