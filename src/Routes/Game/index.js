@@ -6,6 +6,7 @@ import img from '../../Routes/Home/bg1.jpg'
 import classes from './style.module.css'
 const GamePage = () => {
     const [isCards, setCards] = useState({})
+    const [isRender, setRender] = useState(false)
     const handlerClickCard = (id) => {
         setCards(prevState => {
             return Object.entries(prevState).reduce((acc, item) => {
@@ -59,13 +60,20 @@ const GamePage = () => {
                 return acc
             }, {})
         })
+        setRender(!isRender)
     }
-    useEffect(() => {
-        database.ref('pokemons').once('value', snapshot => {
+    const getCardsDataBase = async (name) => {
+        await database.ref(name).once('value', snapshot => {
             setCards(snapshot.val())
         })
-    }, [isCards])
-
+    }
+    useEffect(() => {
+        getCardsDataBase('pokemons')
+        if(isRender === true){
+            setRender(!isRender)
+        }
+        console.log('render')
+    }, [isRender])
     return (
         <>
             <Layout
