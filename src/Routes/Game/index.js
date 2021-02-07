@@ -17,7 +17,7 @@ const GamePage = () => {
             return acc
         }, {})
         setCards(newObject)
-        await database.ref('pokemons/').set(newObject)
+        await database.ref('pokemons/').set(newObject).catch(e => console.log(e))
     }
     const handlerClickAdd = async () => {
         const newKey = database.ref().child('pokemons').push().key;
