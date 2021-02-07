@@ -7,30 +7,21 @@ import classes from './style.module.css'
 const GamePage = () => {
     const [isCards, setCards] = useState({})
     const [isRender, setRender] = useState(false)
-    const handlerClickCard = (id) => {
-        setCards(prevState => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = { ...item[1] }
-                if (pokemon.id === id) {
-                    pokemon.active = !pokemon.active
-                }
-                acc[item[0]] = pokemon
-                return acc
-            }, {})
-        })
-        Object.entries(isCards).forEach(([key, item]) => {
-            const pokemon = { ...item }
+    const handlerClickCard = async (id) => {
+        const newObject = Object.entries(isCards).reduce((acc, item) => {
+            const pokemon = { ...item[1] }
             if (pokemon.id === id) {
-                database.ref('pokemons/' + key).set(({
-                    ...pokemon,
-                    active: !pokemon.active,
-                }))
+                pokemon.active = !pokemon.active
             }
-        })
+            acc[item[0]] = pokemon
+            return acc
+        }, {})
+        setCards(newObject)
+        await database.ref('pokemons/').set(newObject)
     }
-    const handlerClickAdd = () => {
+    const handlerClickAdd = async () => {
         const newKey = database.ref().child('pokemons').push().key;
-        database.ref('pokemons/' + newKey).set({
+        await database.ref('pokemons/' + newKey).set({
             "abilities": ["keen-eye", "tangled-feet", "big-pecks"],
             "base_experience": 122,
             "height": 11,
@@ -53,19 +44,19 @@ const GamePage = () => {
                 "top": "A"
             }
         })
-        setRender(!isRender)
+        .then(() => setRender(!isRender))
+        .catch(e => console.log(e))
     }
     const getCardsDataBase = async (name) => {
-        await database.ref(name).once('value', snapshot => {
-            setCards(snapshot.val())
-        })
+        await database.ref(name).once('value', snapshot => setCards(snapshot.val()))
+        .catch(e => {console.log(e)})
     }
     useEffect(() => {
+        console.log('render')
         getCardsDataBase('pokemons')
         if(isRender === true){
             setRender(!isRender)
         }
-        console.log('render')
     }, [isRender])
     return (
         <>

@@ -11,8 +11,6 @@ import { useRouteMatch, Route, Switch, Redirect } from 'react-router-dom'
 import classes from './App.module.css'
 const App = () => {
   const match = useRouteMatch('/')
-  console.log(match)
-
   return (
 
     <Switch>
