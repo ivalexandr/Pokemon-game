@@ -2,14 +2,13 @@ import { React } from 'react'
 import classNames from 'classnames'
 import BackImg from '../../card-back-side.jpg'
 import classes from './PokemonCard.module.css'
-const PokemonCard = ({ name, img, id, type, values, isActive, onClickCard }) => {
+const PokemonCard = ({ name, img, id, type, values, isActive, onClickCard, minimize, className }) => {
     const handlerClick = (i) => {
-
         onClickCard(id)
     }
     return (
         <div className={classNames(classes.root)} onClick={handlerClick}>
-            <div className={classNames(classes.pokemonCard, { [classes.active]: isActive })}>
+            <div className={classNames(className, classes.pokemonCard, { [classes.active]: isActive })}>
                 <div className={classNames(classes.cardFront)}>
                     <div className={classNames(classes.wrap, classes.front)}>
                         <div className={classNames(classes.pokemon, classes[type])}>
@@ -22,11 +21,11 @@ const PokemonCard = ({ name, img, id, type, values, isActive, onClickCard }) => 
                             <div className={classNames(classes.imgContainer)}>
                                 <img src={img} alt={name} />
                             </div>
-                            <div className={classNames(classes.info)}>
+                            {!minimize && <div className={classNames(classes.info)}>
                                 <span className={classNames(classes.number)}>#{id}</span>
                                 <h3 className={classNames(classes.name)}>{name}</h3>
                                 <small className={classNames(classes.type)}>Type: <span>{type}</span></small>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
