@@ -1,64 +1,64 @@
-import React, { useState, useEffect } from 'react'
-import database from '../../../../services/firebase'
-import Layout from '../../../../Components/Layout/Layout'
+import React, { useState, useEffect, useContext } from 'react'
+import { getCardsDataBase } from '../../../../services/firebase'
 import PokemonCard from '../../../../Components/PokemonCard/PokemonCard'
-import img from '../../../Home/bg1.jpg'
 import { useHistory } from 'react-router-dom'
+import { PokemonContext } from '../../../../context/PokemonContext'
 import classes from './style.module.css'
+
 const StartPage = () => {
+
     const [isCards, setCards] = useState({})
-    const [isRender, setRender] = useState(false)
     const history = useHistory()
-    const handlerClickCard = async (id) => {
+    const context = useContext(PokemonContext)
+    const handlerClickCard = (id) => {
         const newObject = Object.entries(isCards).reduce((acc, item) => {
             const pokemon = { ...item[1] }
             if (pokemon.id === id) {
-                pokemon.active = !pokemon.active
+                pokemon.isSelected = !pokemon.isSelected
+                context.clickHandlerAdd(pokemon)
+                if (!pokemon.isSelected) {
+                    context.clickHandlerRemove(pokemon.id)
+                }
             }
             acc[item[0]] = pokemon
             return acc
         }, {})
         setCards(newObject)
-        await database.ref('pokemons/').set(newObject).catch(e => console.log(e))
     }
-    const handlerClickAdd = () => {
-        history.push('/game/board')
-    }
-    const getCardsDataBase = async (name) => {
-        await database.ref(name).once('value', snapshot => setCards(snapshot.val()))
-            .catch(e => { console.log(e) })
+    const handlerClickStart = () => {
+        if (context.pokemons.length < 5) {
+            alert('Нужно выбрать 5 покемонов')
+        } else {
+            history.push('/game/board')
+        }
     }
     useEffect(() => {
-        console.log('render')
         getCardsDataBase('pokemons')
-        if (isRender === true) {
-            setRender(!isRender)
-        }
-    }, [isRender])
+            .then(snapshot => snapshot.val())
+            .then(res => setCards(res))
+            .catch(e => console.log(e))
+    }, [])
     return (
         <>
-            <Layout
-                title="CARDS GAME POKEMONS!"
-                urlBg={img}
-            >
-                <button className={classes.btn} onClick={handlerClickAdd}>
-                    START GAME
+            <button className={classes.btn} onClick={handlerClickStart}>
+                START GAME
                 </button>
-                <div className={classes.flex}>
-                    {
-                        Object.entries(isCards).map(([key, item]) => <PokemonCard
-                            key={key}
-                            name={item.name}
-                            img={item.img}
-                            id={item.id}
-                            type={item.type}
-                            values={item.values}
-                            isActive={item.active}
-                            onClickCard={handlerClickCard}
-                        />)
-                    }
-                </div>
-            </Layout>
+            <div className={classes.flex}>
+                {
+                    Object.entries(isCards).map(([key, item]) => <PokemonCard
+                        key={key}
+                        name={item.name}
+                        img={item.img}
+                        id={item.id}
+                        type={item.type}
+                        values={item.values}
+                        className={classes.startCardsSize}
+                        isActive={true}
+                        isSelected={item.isSelected}
+                        onClickCard={handlerClickCard}
+                    />)
+                }
+            </div>
         </>
     )
 }

@@ -1,5 +1,5 @@
 .root {
-    background-image: url('./board.png');
+    background-image: url("./board.png");
     background-size: cover;
     background-repeat: no-repeat;
     height: calc(100vw / 1.71);
@@ -24,7 +24,7 @@
     cursor: pointer;
 }
 .boardPlate:hover {
-    background: rgba(255,255,255, .1);
+    background: rgba(255, 255, 255, 0.1);
 }
 .boardPlate.disabled:hover {
     background: none;
@@ -44,4 +44,8 @@
     left: 5vw;
     width: 250px;
     height: 50.3vw;
+}
+.boardCardsSize {
+    max-width: 300px;
+    max-height: 190px;
 }
