@@ -11,7 +11,12 @@ const firebaseConfig = {
     appId: "1:202135897055:web:a40326ef1e770f8ebd3a6a"
 }
 firebase.initializeApp(firebaseConfig)
-export const fire = firebase
-export const database = fire.database()
+const fire = firebase
+const database = fire.database()
+
+export const getCardsDataBase = async (name) => {
+    const res = await database.ref(name).once('value')
+    return res
+}
 
 export default database
