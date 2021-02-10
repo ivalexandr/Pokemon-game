@@ -11,12 +11,15 @@ const firebaseConfig = {
     appId: "1:202135897055:web:a40326ef1e770f8ebd3a6a"
 }
 firebase.initializeApp(firebaseConfig)
-const fire = firebase
-const database = fire.database()
 
-export const getCardsDataBase = async (name) => {
-    const res = await database.ref(name).once('value')
-    return res
+
+class Firebase {
+    constructor() {
+        this.fire = firebase
+        this.database = this.fire.database()
+    }
+    getCardsDataBase = async (name) => {
+        return await this.database.ref(name).once('value').then(snapshot => snapshot.val())
+    }
 }
-
-export default database
+export default Firebase

@@ -1,51 +1,46 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { getCardsDataBase } from '../../../../services/firebase'
 import PokemonCard from '../../../../Components/PokemonCard/PokemonCard'
 import { useHistory } from 'react-router-dom'
 import { PokemonContext } from '../../../../context/PokemonContext'
+import { FireBaseContext } from '../../../../context/FireBaseContext'
 import classes from './style.module.css'
 
 const StartPage = () => {
-
-    const [isCards, setCards] = useState({})
-    const history = useHistory()
+    const firebase = useContext(FireBaseContext)
     const context = useContext(PokemonContext)
-    const handlerClickCard = (id) => {
-        const newObject = Object.entries(isCards).reduce((acc, item) => {
-            const pokemon = { ...item[1] }
-            if (pokemon.id === id) {
-                pokemon.isSelected = !pokemon.isSelected
-                context.clickHandlerAdd(pokemon)
-                if (!pokemon.isSelected) {
-                    context.clickHandlerRemove(pokemon.id)
-                }
-            }
-            acc[item[0]] = pokemon
-            return acc
-        }, {})
-        setCards(newObject)
+    const [cards, setCards] = useState({})
+    const history = useHistory()
+    const clickSelectedHandler = (key) => {
+        const pokemon = { ...cards[key] }
+        context.onSelecetedPokemons(key, pokemon)
+        setCards(prevState => ({
+            ...prevState,
+            [key]: {
+                ...prevState[key],
+                selected: !prevState[key].selected,
+            },
+        }))
     }
     const handlerClickStart = () => {
-        if (context.pokemons.length < 5) {
-            alert('Нужно выбрать 5 покемонов')
-        } else {
-            history.push('/game/board')
-        }
+        history.push('/game/board')
+
+    }
+    const getPokemons = async () => {
+        const response = await firebase.getCardsDataBase('pokemons')
+        setCards(response)
     }
     useEffect(() => {
-        getCardsDataBase('pokemons')
-            .then(snapshot => snapshot.val())
-            .then(res => setCards(res))
-            .catch(e => console.log(e))
+        getPokemons()
+            .catch(error => console.log(error))
     }, [])
     return (
         <>
-            <button className={classes.btn} onClick={handlerClickStart}>
+            <button className={classes.btn} onClick={handlerClickStart} disabled ={Object.keys(context.pokemons).length < 5}>
                 START GAME
                 </button>
             <div className={classes.flex}>
                 {
-                    Object.entries(isCards).map(([key, item]) => <PokemonCard
+                    Object.entries(cards).map(([key, item]) => <PokemonCard
                         key={key}
                         name={item.name}
                         img={item.img}
@@ -53,9 +48,14 @@ const StartPage = () => {
                         type={item.type}
                         values={item.values}
                         className={classes.startCardsSize}
+                        onClickCard={() => {
+                            if (Object.keys(context.pokemons).length < 5 || item.selected) {
+                                clickSelectedHandler(key)
+                            }
+                        }}
                         isActive={true}
-                        isSelected={item.isSelected}
-                        onClickCard={handlerClickCard}
+                        isSelected={item.selected}
+
                     />)
                 }
             </div>

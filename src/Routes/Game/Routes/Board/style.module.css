@@ -44,8 +44,10 @@
     left: 5vw;
     width: 250px;
     height: 50.3vw;
+    padding-top: 30px;
 }
 .boardCardsSize {
-    max-width: 300px;
-    max-height: 190px;
+    margin-top: -30px;
+    width: 100%;
+    max-height: calc(100% / 5 + 30px)
 }

@@ -1,4 +1,4 @@
-import { React } from 'react'
+import React from 'react'
 import classNames from 'classnames'
 import HomePage from './Routes/Home/index'
 import GamePage from './Routes/Game/index'
@@ -7,18 +7,22 @@ import ContactsPage from './Routes/Contacts/index'
 import NotFoundPage from './Routes/NotFound/index'
 import MenuHeader from './Components/MenuHeader/MenuHeader'
 import Footer from './Components/Footer/Footer'
-import { useRouteMatch, Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom'
+import { FireBaseContext } from './context/FireBaseContext'
+import Firebase from './services/firebase'
 import classes from './App.module.css'
 const App = () => {
-  const match = useRouteMatch('/')
+  const location = useLocation()
+  const isPadding = location.pathname === '/' || location.pathname === '/game/board'
+  console.log(location)
   return (
-
+    <FireBaseContext.Provider value = {new Firebase()} >
     <Switch>
       <Route path='/notFound' component={NotFoundPage} />
       <Route>
         <>
-          <MenuHeader bgActive={!match.isExact} />
-          <div className={classNames(classes.wrapper, { [classes.isHomePage]: match.isExact })}>
+          <MenuHeader bgActive={!isPadding} />
+          <div className={classNames(classes.wrapper, { [classes.isHomePage]: isPadding })}>
             <Switch >
               <Route path='/' exact component={HomePage} />
               <Route path='/game' component={GamePage} />
@@ -34,7 +38,7 @@ const App = () => {
         </>
       </Route>
     </Switch>
-
+</FireBaseContext.Provider>
   )
 }
 export default App

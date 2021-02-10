@@ -2,11 +2,11 @@ import { React } from 'react'
 import cn from 'classnames'
 import s from './PokemonCard.module.css'
 const PokemonCard = ({ name, img, id, type, values, isActive, onClickCard, minimize, className, isSelected }) => {
-    const handlerClick = (i) => {
-        onClickCard(id)
+    const clickHandler = () => {
+        onClickCard && onClickCard(id)
     }
     return (
-        <div className={cn(className, s.pokemonCard, { [s.active]: isActive }, {[s.selected]:isSelected})} onClick = {handlerClick}>
+        <div className={cn(className, s.pokemonCard, { [s.active]: isActive }, {[s.selected]:isSelected})} onClick = {clickHandler}>
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
                     <div className={cn(s.pokemon, s[type])}>
