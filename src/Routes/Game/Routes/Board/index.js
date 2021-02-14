@@ -5,10 +5,10 @@ import { useHistory } from 'react-router-dom'
 import PlayerBoard from './components/PlayerBoard/index'
 import classes from './style.module.css';
 const BoardPage = () => {
-    const { pokemons } = useContext(PokemonContext)
+    const context = useContext(PokemonContext)
     const [board, setBoard] = useState([])
     const [playerOne, setPlayerOne] = useState(() => {
-        return Object.values(pokemons).map(item => {
+        return Object.values(context.pokemons).map(item => {
             return {
                 ...item,
                 possession: 'blue',
@@ -17,6 +17,20 @@ const BoardPage = () => {
     })
     const [playerTwo, setPlayerTwo] = useState([])
     const [choiseCard, setChoisCard] = useState(null)
+    const [steps, setSteps] = useState(0)
+    const counterWin = (board, playerOne, playerTwo) => {
+        let playerOneCounter = playerOne.length
+        let playerTwoCounter = playerTwo.length
+        board.forEach(item => {
+            if (item.card.possession === 'red') {
+                playerTwoCounter++
+            }
+            if (item.card.possession === 'blue') {
+                playerOneCounter++
+            }
+        })
+        return [playerOneCounter, playerTwoCounter]
+    }
     useEffect(() => {
         (async function getBoard() {
             return await fetch('https://reactmarathon-api.netlify.app/api/board')
@@ -28,6 +42,10 @@ const BoardPage = () => {
             return await fetch('https://reactmarathon-api.netlify.app/api/create-player')
         }())
             .then(res => res.json())
+            .then(req => {
+                context.getPlayerTwoPokemons(req)
+                return req
+            })
             .then(req => setPlayerTwo(() => {
                 return req.data.map(item => {
                     return {
@@ -39,12 +57,10 @@ const BoardPage = () => {
             .catch(e => console.log('error', e));
     }, [])
     const history = useHistory()
-    // if(Object.keys(pokemons).length === 0){
-    //     history.replace('/game')
-    // }
+    if (Object.keys(context.pokemons).length === 0) {
+        history.replace('/game')
+    }
     const clickBoardPlateHandler = async (position) => {
-        // console.log(position)
-        console.log(choiseCard)
         if (choiseCard) {
             const params = {
                 position,
@@ -59,12 +75,42 @@ const BoardPage = () => {
                 body: JSON.stringify(params),
             });
             const request = await res.json();
+            if (choiseCard.player === 1) {
+                setPlayerOne((prevState) => prevState.filter(item => item.id !== choiseCard.id))
+            }
+            if (choiseCard.player === 2) {
+                setPlayerTwo((prevState) => prevState.filter(item => item.id !== choiseCard.id))
+            }
             setBoard(request.data)
+            setSteps(prevState => {
+                const count = prevState + 1
+                return count
+            })
         }
-
     }
-    console.log(playerOne)
-    console.log(playerTwo)
+    useEffect(() => {
+        if (steps === 9) {
+            context.getSteps(true)
+            const [count1, count2] = counterWin(board, playerOne, playerTwo)
+            if (count1 > count2) {
+                alert('WIN')
+                context.getWin(true)
+                setTimeout(() => {
+                    history.replace('/game/finish')
+                }, 500);
+            } else if (count1 < count2) {
+                alert('LOSE')
+                setTimeout(() => {
+                    history.replace('/game/finish')
+                }, 500);
+            } else {
+                alert('DRAW')
+                setTimeout(() => {
+                    history.replace('/game/finish')
+                }, 500);
+            }
+        }
+    }, [steps])
     return (
         <div className={classes.root}>
             <div className={classes.playerOne}>

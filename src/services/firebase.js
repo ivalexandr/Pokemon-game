@@ -21,5 +21,9 @@ class Firebase {
     getCardsDataBase = async (name) => {
         return await this.database.ref(name).once('value').then(snapshot => snapshot.val())
     }
+    setCardDataBase = async (card) => {
+        const newKey = this.database.ref().child('pokemons').push().key
+        await this.database.ref('pokemons/' + newKey).set(card)
+    }
 }
 export default Firebase
