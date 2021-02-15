@@ -1,7 +1,7 @@
 import { React } from 'react'
 import cn from 'classnames'
 import s from './PokemonCard.module.css'
-const PokemonCard = ({ name, img, id, type, values, isActive, onClickCard, minimize, className, isSelected }) => {
+const PokemonCard = ({possession, name, img, id, type, values, isActive, onClickCard, minimize, className, isSelected }) => {
     const clickHandler = () => {
         onClickCard && onClickCard(id)
     }
@@ -9,7 +9,7 @@ const PokemonCard = ({ name, img, id, type, values, isActive, onClickCard, minim
         <div className={cn(className, s.pokemonCard, { [s.active]: isActive }, {[s.selected]:isSelected})} onClick = {clickHandler}>
             <div className={s.cardFront}>
                 <div className={cn(s.wrap, s.front)}>
-                    <div className={cn(s.pokemon, s[type])}>
+                    <div className={cn(s.pokemon, s[type], s[possession])}>
                         <div className={s.values}>
                             <div className={cn(s.count, s.top)}>{values.top}</div>
                             <div className={cn(s.count, s.right)}>{values.right}</div>

@@ -1,0 +1,8 @@
+.cardBoard {
+    margin-top: -30px;
+    width: 100%;
+    height: calc(100% / 5 + 30px)
+}
+.cardBoard.selected{
+    margin-left: -20px;
+}
